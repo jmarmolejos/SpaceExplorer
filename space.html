@@ -19,12 +19,60 @@
 		<script src="js/calcs.js"></script>
 		
 		<script src="game.js"></script>
-		
-		<script>
+
+        <style>
+            #ship_controller
+            {
+                position: relative;
+            }
+
+            #btn_up, #btn_left, #btn_right {
+                position: absolute;
+                top: 200px
+            }
+
+            #btn_up {
+                top:220px;
+                left: 20px;
+            }
+
+            #btn_right {
+                left: 400px;
+            }
+
+            #btn_left {
+                left: 330px;
+            }
+        </style>
+
+        <script>
 		
 			$(function(){
 				var canvas = $('#le-canvas');
-				
+
+                $('#btn_up').mousedown(function(){
+                    game.playerShip.thrustersOn = true;
+                })
+
+                $('#btn_up').mouseup(function(){
+                    game.playerShip.thrustersOn = false;
+                })
+
+                $('#btn_left').mousedown(function(){
+                    game.playerShip.turningLeft = true;
+                })
+
+                $('#btn_left').mouseup(function(){
+                    game.playerShip.turningLeft = false;
+                })
+
+                $('#btn_right').mousedown(function(){
+                    game.playerShip.turningRight = true;
+                })
+
+                $('#btn_right').mouseup(function(){
+                    game.playerShip.turningRight = false;
+                })
 			})
 			
 			window.onload = function() {
@@ -75,16 +123,7 @@
 					bg.render(ctx);
 
 					game.playerShip.render(ctx);
-
-                    var btn_up = new game.Sprite('imgs/sprites/button.png', game.ViewPort.x +25, game.ViewPort.getBottom() - 110, game.ViewPort.width, game.ViewPort.height, 1500)
-                    btn_up.render(ctx);
-
-                    var btn_right = new game.Sprite('imgs/sprites/button_r.png', game.ViewPort.getRight() - 75, game.ViewPort.getBottom() - 120, 90*Math.PI/180)
-                    btn_right.render(ctx);
-
-                    var btn_left = new game.Sprite('imgs/sprites/button_l.png', game.ViewPort.getRight() - 135, game.ViewPort.getBottom() - 120, 90*Math.PI/180)
-                    btn_left.render(ctx);
-					
+                    
 					ctx.restore();
 					
 				}, 1000/24)
@@ -210,7 +249,7 @@
 				
 			}
 
-            var can, ctx, canX, canY, mouseIsDown = 0;
+        var can, ctx, canX, canY, mouseIsDown = 0;
 
         function trackTouch() {
             can = document.getElementById("le-canvas");
@@ -304,7 +343,14 @@
 
 		<div style="width: 500px">
 
-			<canvas id="le-canvas" width="480" height="320">
+			<div id="ship_controller" style="position:absolute">
+                <img id="btn_up" src="imgs/sprites/button.png" />
+
+                <img id="btn_left" src="imgs/sprites/button_l.png" />
+                <img id="btn_right" src="imgs/sprites/button_r.png" />
+			</div>
+
+            <canvas id="le-canvas" width="480" height="320">
 				Fallback content
 			</canvas>
 			
