@@ -52,26 +52,32 @@
 
                 $('#btn_up').bind("touchstart", function(){
                     game.playerShip.thrustersOn = true;
+                    return false;
                 })
 
                 $('#btn_up').bind('touchend', function(){
                     game.playerShip.thrustersOn = false;
+                    return false;
                 })
 
                 $('#btn_left').bind('touchstart', function(){
                     game.playerShip.turningLeft = true;
+                    return false;
                 })
 
                 $('#btn_left').bind('touchend', function(){
                     game.playerShip.turningLeft = false;
+                    return false;
                 })
 
                 $('#btn_right').bind('touchstart', function(){
                     game.playerShip.turningRight = true;
+                    return false;
                 })
 
                 $('#btn_right').bind('touchend', function(){
                     game.playerShip.turningRight = false;
+                    return false;
                 })
 			})
 			
