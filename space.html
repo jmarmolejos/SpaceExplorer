@@ -62,15 +62,15 @@
                     game.playerShip.turningLeft = true;
                 })
 
-                $('#btn_left').mouseup(function(){
+                $('#btn_left').bind('touchend', function(){
                     game.playerShip.turningLeft = false;
                 })
 
-                $('#btn_right').mousedown(function(){
+                $('#btn_right').bind('touchstart', function(){
                     game.playerShip.turningRight = true;
                 })
 
-                $('#btn_right').mouseup(function(){
+                $('#btn_right').bind('touchend', function(){
                     game.playerShip.turningRight = false;
                 })
 			})
