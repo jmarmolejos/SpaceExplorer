@@ -31,7 +31,9 @@
 				// This works better/less buggy than document.ready when working with the canvas
 				
 				var ctx = contextFactory.getContext('le-canvas');
-				
+
+                trackTouch()
+
 				game.playerShip = new game.Ship(100, 100, 37, 81);
 				game.playerShip.sprite = new game.Sprite("imgs/sprites/razor1.png" ,game.playerShip.x, game.playerShip.y, 1);
 				
@@ -207,6 +209,82 @@
 				};
 				
 			}
+
+            var can, ctx, canX, canY, mouseIsDown = 0;
+
+        function trackTouch() {
+            can = document.getElementById("le-canvas");
+            ctx = can.getContext("2d");
+
+            can.addEventListener("mousedown", mouseDown, false);
+            can.addEventListener("mousemove", mouseXY, false);
+            can.addEventListener("touchstart", touchDown, false);
+            can.addEventListener("touchmove", touchXY, true);
+            can.addEventListener("touchend", touchUp, false);
+
+            document.body.addEventListener("mouseup", mouseUp, false);
+            document.body.addEventListener("touchcancel", touchUp, false);
+        }
+
+        function mouseUp() {
+            mouseIsDown = 0;
+            mouseXY();
+        }
+
+        function touchUp() {
+            mouseIsDown = 0;
+            // no touch to track, so just show state
+            showPos();
+        }
+
+        function mouseDown() {
+            mouseIsDown = 1;
+            mouseXY();
+        }
+
+        function touchDown() {
+            mouseIsDown = 1;
+            touchXY();
+        }
+
+        function mouseXY(e) {
+            if (!e)
+                var e = event;
+            canX = e.pageX - can.offsetLeft;
+            canY = e.pageY - can.offsetTop;
+            showPos();
+        }
+
+        function touchXY(e) {
+            if (!e)
+                var e = event;
+            e.preventDefault();
+            canX = e.targetTouches[0].pageX - can.offsetLeft;
+            canY = e.targetTouches[0].pageY - can.offsetTop;
+            showPos();
+        }
+
+        function showPos() {
+            // large, centered, bright green text
+            ctx.font = "24pt Helvetica";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "rgb(64,255,64)";
+            var str = canX + ", " + canY;
+            if (mouseIsDown)
+                str += " down";
+            if (!mouseIsDown)
+                str += " up";
+            /*ctx.clearRect(0, 0, can.width, can.height);
+            // draw text at center, max length to fit on canvas
+            ctx.fillText(str, can.width / 2, can.height / 2, can.width - 10);
+            // plot cursor
+            ctx.fillStyle = "white";
+            ctx.fillRect(canX -5, canY -5, 10, 10);*/
+
+            var p = $('<p />', { text: str });
+            $('#trace_console').empty().append(p);
+        }
 			
 		</script>
 		
@@ -224,12 +302,18 @@
             <img src="imgs/sprites/razor1.png" />
         </div>
 
-		<div>
+		<div style="width: 500px">
 
 			<canvas id="le-canvas" width="480" height="320">
 				Fallback content
 			</canvas>
 			
 		</div>
+
+        <div id="trace_console" style="width:300px; float:left">
+
+        </div>
+
+
 	</body>
 </html>
