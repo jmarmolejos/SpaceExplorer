@@ -38,10 +38,10 @@
 				// Main loop
 				setInterval(function(){
 					
-					ctx.clearRect(0, 0, 800, 600)
-					
+					ctx.clearRect(0, 0, game.ViewPort.width, game.ViewPort.height);
+
 					ctx.save();
-					
+
 					updateViewPort();
 					
 					ctx.translate(-game.ViewPort.x, -game.ViewPort.y)
@@ -69,10 +69,19 @@
 					game.playerShip.x += game.playerShip.dx; // If we multiply here by the cos instead, the ship feels easier to fly yet clunky
 					game.playerShip.y += game.playerShip.dy;
 					
-					var bg = new game.Sprite('imgs/bg.png', 0, 0, 800, 600, -1);
+					var bg = new game.Sprite('imgs/bg.png', 0, 0, game.ViewPort.width, game.ViewPort.height, -1);
 					bg.render(ctx);
-					
+
 					game.playerShip.render(ctx);
+
+                    var btn_up = new game.Sprite('imgs/sprites/button.png', game.ViewPort.x +25, game.ViewPort.getBottom() - 110, game.ViewPort.width, game.ViewPort.height, 1500)
+                    btn_up.render(ctx);
+
+                    var btn_right = new game.Sprite('imgs/sprites/button_r.png', game.ViewPort.getRight() - 75, game.ViewPort.getBottom() - 120, 90*Math.PI/180)
+                    btn_right.render(ctx);
+
+                    var btn_left = new game.Sprite('imgs/sprites/button_l.png', game.ViewPort.getRight() - 135, game.ViewPort.getBottom() - 120, 90*Math.PI/180)
+                    btn_left.render(ctx);
 					
 					ctx.restore();
 					
@@ -156,9 +165,9 @@
 			checkBounds = function() {
 				
 					
-				if (game.playerShip.x > 1244) {
+				if (game.playerShip.x > game.Boundaries.x) {
 					game.playerShip.dx = 0;
-					game.playerShip.x = 1243;
+					game.playerShip.x = game.Boundaries.x;
 				}
 				
 				if (game.playerShip.x < 0) {
@@ -166,9 +175,9 @@
 					game.playerShip.x = 10;
 				}
 				
-				if (game.playerShip.y > 980) {
+				if (game.playerShip.y > game.Boundaries.y) {
 					game.playerShip.dy = 0;
-					game.playerShip.y = 979;
+					game.playerShip.y = game.Boundaries.y;
 				}
 				
 				if (game.playerShip.y < 0) {
@@ -181,16 +190,16 @@
 				game.ViewPort.x = game.playerShip.x - (game.ViewPort.width/2);
 				game.ViewPort.y = game.playerShip.y - (game.ViewPort.height/2);
 				
-				if (game.ViewPort.x > 1244 - game.ViewPort.width) {
-					game.ViewPort.x = 1244 - game.ViewPort.width;
+				if (game.ViewPort.x > game.Boundaries.x - game.ViewPort.width) {
+					game.ViewPort.x = game.Boundaries.x - game.ViewPort.width;
 				};
 				
 				if (game.ViewPort.x < 0) {
 					game.ViewPort.x = 0;
 				};
 				
-				if (game.ViewPort.y > 980 - game.ViewPort.height) {
-					game.ViewPort.y = 980 - game.ViewPort.height;
+				if (game.ViewPort.y > game.Boundaries.y - game.ViewPort.height) {
+					game.ViewPort.y = game.Boundaries.y - game.ViewPort.height;
 				};
 				
 				if (game.ViewPort.y < 0) {
@@ -211,13 +220,13 @@
 		
 	</head>
 	<body>
+        <div class="resources" style="display: none">
+            <img src="imgs/sprites/razor1.png" />
+        </div>
+
 		<div>
-			
-			
-			<img src="imgs/sprites/razor1.png" />
-			
-			
-			<canvas id="le-canvas" width="800" height="600">
+
+			<canvas id="le-canvas" width="480" height="320">
 				Fallback content
 			</canvas>
 			

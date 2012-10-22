@@ -56,17 +56,29 @@ game.Ship.prototype.render = function(ctx) {
 	ctx.restore();
 }
 
-game.Sprite.prototype.render = function(ctx) {
+game.Sprite.prototype.render = function(ctx, rotate) {
 	var img = new Image();
 	img.src = this.path;
-	//console.log(this.path)
+	
 	ctx.drawImage(img, this.x, this.y);
 }
-
 
 game.ViewPort = {
 	x: 0,
 	y: 0,
-	width: 800,
-	height: 600
+	width: 480,
+	height: 320,
+
+    getBottom: function() {
+        return this.y + this.height
+    },
+
+    getRight: function (){
+        return this.x + this.width
+    }
 };
+
+game.Boundaries = {
+    x: 1244,
+    y:980
+}
