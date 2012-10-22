@@ -50,15 +50,15 @@
 			$(function(){
 				var canvas = $('#le-canvas');
 
-                $('#btn_up').mousedown(function(){
+                $('#btn_up').bind("touchstart", function(){
                     game.playerShip.thrustersOn = true;
                 })
 
-                $('#btn_up').mouseup(function(){
+                $('#btn_up').bind('touchend', function(){
                     game.playerShip.thrustersOn = false;
                 })
 
-                $('#btn_left').mousedown(function(){
+                $('#btn_left').bind('touchstart', function(){
                     game.playerShip.turningLeft = true;
                 })
 
