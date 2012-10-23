@@ -121,7 +121,7 @@
 						game.playerShip.dy *= decay;
 					};
 					
-					checkBounds();
+					//checkBounds();
 					
 					game.playerShip.x += game.playerShip.dx; // If we multiply here by the cos instead, the ship feels easier to fly yet clunky
 					game.playerShip.y += game.playerShip.dy;
@@ -217,17 +217,17 @@
 					game.playerShip.dx = 0;
 					game.playerShip.x = game.Boundaries.x;
 				}
-				
+
 				if (game.playerShip.x < 0) {
 					game.playerShip.dx = 0;
 					game.playerShip.x = 10;
 				}
-				
+
 				if (game.playerShip.y > game.Boundaries.y) {
 					game.playerShip.dy = 0;
 					game.playerShip.y = game.Boundaries.y;
 				}
-				
+
 				if (game.playerShip.y < 0) {
 					game.playerShip.dy = 0;
 					game.playerShip.y = 20;
@@ -315,11 +315,7 @@
         }
 
         function showPos() {
-            // large, centered, bright green text
-            ctx.font = "24pt Helvetica";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = "rgb(64,255,64)";
+
             var str = canX + ", " + canY;
             if (mouseIsDown)
                 str += " down";
@@ -327,8 +323,8 @@
                 str += " up";
             
 
-            game.playerShip.heading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX + game.ViewPort.x, y:canY + game.ViewPort.y});
-            game.playerShip.heading += (90 * Math.PI/180); // Correction needed because I created the ship's sprite with the wrong orientation
+            game.playerShip.targetHeading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX + game.ViewPort.x, y:canY + game.ViewPort.y});
+            game.playerShip.targetHeading += (90 * Math.PI/180); // Correction needed because I created the ship's sprite with the wrong orientation
 
             str = game.playerShip.x
             var p = $('<p />', { text: str });

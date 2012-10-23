@@ -13,6 +13,7 @@ game.Ship = function(x, y, width, height) {
 	this.turningRight = false;
 	this.turningLeft = false;
 	this.maxSpeed = 15;
+    this.targetHeading = this.heading;
 }
 
 game.Sprite = function (path, x, y, depth) {
@@ -29,9 +30,11 @@ game.Ship.prototype.render = function(ctx) {
 	ctx.save();
 	
 	ctx.translate(this.x - (this.width/2), this.y - (this.height/2))
-	
+
+    this.heading += (this.targetHeading - this.heading) * 0.15
+
 	ctx.rotate(this.heading);
-	
+
 	//console.log(this.path)
 	
 	if (game.playerShip.thrustersOn) {
