@@ -23,6 +23,7 @@
         <style>
             #ship_controller
             {
+                display:none;
                 position: relative;
             }
 
@@ -273,22 +274,26 @@
 
         function mouseUp() {
             mouseIsDown = 0;
+            game.playerShip.thrustersOn = false
             mouseXY();
         }
 
         function touchUp() {
             mouseIsDown = 0;
+            game.playerShip.thrustersOn = false;
             // no touch to track, so just show state
             showPos();
         }
 
         function mouseDown() {
             mouseIsDown = 1;
+            game.playerShip.thrustersOn = true
             mouseXY();
         }
 
         function touchDown() {
             mouseIsDown = 1;
+            game.playerShip.thrustersOn = true
             touchXY();
         }
 
@@ -309,7 +314,7 @@
             showPos(e.targetTouches.length);
         }
 
-        function showPos(touches) {
+        function showPos() {
             // large, centered, bright green text
             ctx.font = "24pt Helvetica";
             ctx.textAlign = "center";
@@ -320,15 +325,21 @@
                 str += " down";
             if (!mouseIsDown)
                 str += " up";
-            /*ctx.clearRect(0, 0, can.width, can.height);
-            // draw text at center, max length to fit on canvas
-            ctx.fillText(str, can.width / 2, can.height / 2, can.width - 10);
-            // plot cursor
-            ctx.fillStyle = "white";
-            ctx.fillRect(canX -5, canY -5, 10, 10);*/
+            
 
-            var p = $('<p />', { text: str + "<br />" + touches });
+            game.playerShip.heading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX, y:canY});
+            game.playerShip.heading += (90 * Math.PI/180); // Correction needed because I created the ship's sprite with the wrong orientation
+
+            str = calcRotation({x:0,y:0} , {x:canX, y:canY})
+            var p = $('<p />', { text: str });
             $('#trace_console').empty().append(p);
+        }
+
+        function calcRotation (p1, p2) {
+            var x = p2.x - p1.x;
+            var y = p2.y - p1.y;
+
+            return -Math.atan2(x, y) // negative to adjust for the triangle's initial orientation
         }
 			
 		</script>
