@@ -327,10 +327,10 @@
                 str += " up";
             
 
-            game.playerShip.heading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX, y:canY});
+            game.playerShip.heading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX + game.ViewPort.x, y:canY + game.ViewPort.y});
             game.playerShip.heading += (90 * Math.PI/180); // Correction needed because I created the ship's sprite with the wrong orientation
 
-            str = calcRotation({x:0,y:0} , {x:canX, y:canY})
+            str = game.playerShip.x
             var p = $('<p />', { text: str });
             $('#trace_console').empty().append(p);
         }
