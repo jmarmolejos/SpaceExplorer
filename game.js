@@ -31,7 +31,7 @@ game.Ship.prototype.render = function(ctx) {
 	ctx.translate(this.x - (this.width/2), this.y - (this.height/2))
 	
 	ctx.rotate(this.heading);
-	
+
 	//console.log(this.path)
 	
 	if (game.playerShip.thrustersOn) {
