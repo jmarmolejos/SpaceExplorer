@@ -309,7 +309,7 @@
             showPos(e.targetTouches.length);
         }
 
-        function showPos() {
+        function showPos(touches) {
             // large, centered, bright green text
             ctx.font = "24pt Helvetica";
             ctx.textAlign = "center";
@@ -327,7 +327,7 @@
             ctx.fillStyle = "white";
             ctx.fillRect(canX -5, canY -5, 10, 10);*/
 
-            var p = $('<p />', { text: str });
+            var p = $('<p />', { text: str + "<br />" + touches });
             $('#trace_console').empty().append(p);
         }
 			
