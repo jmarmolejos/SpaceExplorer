@@ -31,7 +31,7 @@ game.Ship.prototype.render = function(ctx) {
 	
 	ctx.translate(this.x - (this.width/2), this.y - (this.height/2))
 
-    this.heading += (this.targetHeading - this.heading) * 0.15
+    this.heading += (this.targetHeading - this.heading) * 0.25
 
 	ctx.rotate(this.heading);
 

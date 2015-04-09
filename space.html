@@ -326,7 +326,7 @@
             game.playerShip.targetHeading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX + game.ViewPort.x, y:canY + game.ViewPort.y});
             game.playerShip.targetHeading += (90 * Math.PI/180); // Correction needed because I created the ship's sprite with the wrong orientation
 
-            str = game.playerShip.x
+            str = game.playerShip.targetHeading * 180/Math.PI
             var p = $('<p />', { text: str });
             $('#trace_console').empty().append(p);
         }
