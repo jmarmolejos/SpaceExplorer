@@ -19,12 +19,67 @@
 		<script src="js/calcs.js"></script>
 		
 		<script src="game.js"></script>
-		
-		<script>
+
+        <style>
+            #ship_controller
+            {
+                display:none;
+                position: relative;
+            }
+
+            #btn_up, #btn_left, #btn_right {
+                position: absolute;
+                top: 200px
+            }
+
+            #btn_up {
+                top:220px;
+                left: 20px;
+            }
+
+            #btn_right {
+                left: 400px;
+            }
+
+            #btn_left {
+                left: 330px;
+            }
+        </style>
+
+        <script>
 		
 			$(function(){
 				var canvas = $('#le-canvas');
-				
+
+                $('#btn_up').bind("touchstart", function(){
+                    game.playerShip.thrustersOn = true;
+                    return false;
+                })
+
+                $('#btn_up').bind('touchend', function(){
+                    game.playerShip.thrustersOn = false;
+                    return false;
+                })
+
+                $('#btn_left').bind('touchstart', function(){
+                    game.playerShip.turningLeft = true;
+                    return false;
+                })
+
+                $('#btn_left').bind('touchend', function(){
+                    game.playerShip.turningLeft = false;
+                    return false;
+                })
+
+                $('#btn_right').bind('touchstart', function(){
+                    game.playerShip.turningRight = true;
+                    return false;
+                })
+
+                $('#btn_right').bind('touchend', function(){
+                    game.playerShip.turningRight = false;
+                    return false;
+                })
 			})
 			
 			window.onload = function() {
@@ -66,7 +121,7 @@
 						game.playerShip.dy *= decay;
 					};
 					
-					checkBounds();
+					//checkBounds();
 					
 					game.playerShip.x += game.playerShip.dx; // If we multiply here by the cos instead, the ship feels easier to fly yet clunky
 					game.playerShip.y += game.playerShip.dy;
@@ -75,16 +130,7 @@
 					bg.render(ctx);
 
 					game.playerShip.render(ctx);
-
-                    var btn_up = new game.Sprite('imgs/sprites/button.png', game.ViewPort.x +25, game.ViewPort.getBottom() - 110, game.ViewPort.width, game.ViewPort.height, 1500)
-                    btn_up.render(ctx);
-
-                    var btn_right = new game.Sprite('imgs/sprites/button_r.png', game.ViewPort.getRight() - 75, game.ViewPort.getBottom() - 120, 90*Math.PI/180)
-                    btn_right.render(ctx);
-
-                    var btn_left = new game.Sprite('imgs/sprites/button_l.png', game.ViewPort.getRight() - 135, game.ViewPort.getBottom() - 120, 90*Math.PI/180)
-                    btn_left.render(ctx);
-					
+                    
 					ctx.restore();
 					
 				}, 1000/24)
@@ -171,17 +217,17 @@
 					game.playerShip.dx = 0;
 					game.playerShip.x = game.Boundaries.x;
 				}
-				
+
 				if (game.playerShip.x < 0) {
 					game.playerShip.dx = 0;
 					game.playerShip.x = 10;
 				}
-				
+
 				if (game.playerShip.y > game.Boundaries.y) {
 					game.playerShip.dy = 0;
 					game.playerShip.y = game.Boundaries.y;
 				}
-				
+
 				if (game.playerShip.y < 0) {
 					game.playerShip.dy = 0;
 					game.playerShip.y = 20;
@@ -210,7 +256,7 @@
 				
 			}
 
-            var can, ctx, canX, canY, mouseIsDown = 0;
+        var can, ctx, canX, canY, mouseIsDown = 0;
 
         function trackTouch() {
             can = document.getElementById("le-canvas");
@@ -228,22 +274,26 @@
 
         function mouseUp() {
             mouseIsDown = 0;
+            game.playerShip.thrustersOn = false
             mouseXY();
         }
 
         function touchUp() {
             mouseIsDown = 0;
+            game.playerShip.thrustersOn = false;
             // no touch to track, so just show state
             showPos();
         }
 
         function mouseDown() {
             mouseIsDown = 1;
+            game.playerShip.thrustersOn = true
             mouseXY();
         }
 
         function touchDown() {
             mouseIsDown = 1;
+            game.playerShip.thrustersOn = true
             touchXY();
         }
 
@@ -261,29 +311,31 @@
             e.preventDefault();
             canX = e.targetTouches[0].pageX - can.offsetLeft;
             canY = e.targetTouches[0].pageY - can.offsetTop;
-            showPos();
+            showPos(e.targetTouches.length);
         }
 
         function showPos() {
-            // large, centered, bright green text
-            ctx.font = "24pt Helvetica";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = "rgb(64,255,64)";
+
             var str = canX + ", " + canY;
             if (mouseIsDown)
                 str += " down";
             if (!mouseIsDown)
                 str += " up";
-            /*ctx.clearRect(0, 0, can.width, can.height);
-            // draw text at center, max length to fit on canvas
-            ctx.fillText(str, can.width / 2, can.height / 2, can.width - 10);
-            // plot cursor
-            ctx.fillStyle = "white";
-            ctx.fillRect(canX -5, canY -5, 10, 10);*/
+            
 
+            game.playerShip.targetHeading = calcRotation({x: game.playerShip.x - (game.playerShip.width/2), y: game.playerShip.y - (game.playerShip.height/2)}, {x:canX + game.ViewPort.x, y:canY + game.ViewPort.y});
+            game.playerShip.targetHeading += (90 * Math.PI/180); // Correction needed because I created the ship's sprite with the wrong orientation
+
+            str = game.playerShip.targetHeading * 180/Math.PI
             var p = $('<p />', { text: str });
             $('#trace_console').empty().append(p);
+        }
+
+        function calcRotation (p1, p2) {
+            var x = p2.x - p1.x;
+            var y = p2.y - p1.y;
+
+            return -Math.atan2(x, y) // negative to adjust for the triangle's initial orientation
         }
 			
 		</script>
@@ -304,13 +356,20 @@
 
 		<div style="width: 500px">
 
-			<canvas id="le-canvas" width="480" height="320">
+			<div id="ship_controller" style="position:absolute">
+                <img id="btn_up" src="imgs/sprites/button.png" />
+
+                <img id="btn_left" src="imgs/sprites/button_l.png" />
+                <img id="btn_right" src="imgs/sprites/button_r.png" />
+			</div>
+
+            <canvas id="le-canvas" width="480" height="320">
 				Fallback content
 			</canvas>
 			
 		</div>
 
-        <div id="trace_console" style="width:500px; float:left">
+        <div id="trace_console" style="width:300px; float:left">
 
         </div>
 
